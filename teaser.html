@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AccountableME -- 60-Second Teaser</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --coral: #E8735A;
+    --coral-light: #F4A393;
+    --warm-bg: #1A1410;
+    --warm-bg-light: #2A2218;
+    --cream: #FAF5F0;
+    --cream-dim: #C8BFB4;
+    --gold: #D4A86A;
+    --navy: #1B2A4A;
+    --green: #4CAF7D;
+    --red: #E85A5A;
+    --phone-bg: #0A0A0A;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #000;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    color: var(--cream);
+  }
+
+  /* ── PLAYER WRAPPER ── */
+  #player {
+    position: relative;
+    width: 100vw; height: 100vh;
+    background: var(--warm-bg);
+    overflow: hidden;
+  }
+
+  /* ── SCENES ── */
+  .scene {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+  }
+  .scene.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── GLOBAL TEXT OVERLAY ── */
+  .text-overlay {
+    position: absolute;
+    bottom: 12%;
+    left: 50%; transform: translateX(-50%);
+    text-align: center;
+    width: 80%;
+    max-width: 700px;
+    z-index: 10;
+  }
+  .text-overlay .main-text {
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    font-weight: 400;
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+    color: var(--cream);
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .scene.active .text-overlay .main-text {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .text-overlay .sub-text {
+    font-size: clamp(0.8rem, 1.6vw, 1rem);
+    font-weight: 300;
+    color: var(--cream-dim);
+    margin-top: 10px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
+  }
+  .scene.active .text-overlay .sub-text {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .coral { color: var(--coral); }
+  .gold { color: var(--gold); }
+
+  /* ── VISUAL ELEMENTS ── */
+  .visual-area {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 60px;
+  }
+
+  /* Alarm / Phone */
+  .phone-frame {
+    width: 220px; height: 420px;
+    background: var(--phone-bg);
+    border-radius: 32px;
+    border: 3px solid #333;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .phone-frame .notch {
+    position: absolute; top: 8px;
+    width: 80px; height: 22px;
+    background: #000; border-radius: 12px;
+    z-index: 5;
+  }
+
+  /* Alarm screen */
+  .alarm-screen {
+    text-align: center;
+  }
+  .alarm-time {
+    font-size: 3.2rem;
+    font-weight: 200;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+  .alarm-label {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 4px;
+  }
+  .alarm-btn {
+    margin-top: 24px;
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    border: 2px solid var(--coral);
+    display: flex; align-items: center; justify-content: center;
+    margin-left: auto; margin-right: auto;
+    cursor: pointer;
+    animation: pulse-alarm 2s infinite;
+  }
+  .alarm-btn span {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--coral);
+  }
+  @keyframes pulse-alarm {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,115,90,0.3); }
+    50% { box-shadow: 0 0 0 15px rgba(232,115,90,0); }
+  }
+
+  /* Notebook */
+  .notebook {
+    width: 280px;
+    background: #F5F0E8;
+    border-radius: 4px;
+    padding: 30px 25px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    position: relative;
+  }
+  .notebook::before {
+    content: '';
+    position: absolute; left: 20px; top: 0; bottom: 0;
+    width: 2px; background: rgba(200,80,80,0.3);
+  }
+  .notebook .todo-item {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #5A5040;
+    padding: 8px 0 8px 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0;
+    animation: fadeInItem 0.4s ease forwards;
+  }
+  .notebook .todo-item .checkbox {
+    width: 16px; height: 16px;
+    border: 1.5px solid #B0A890;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .coffee-ring {
+    position: absolute;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgba(140,100,60,0.15);
+    bottom: 15px; right: 10px;
+    transform: rotate(-15deg);
+  }
+  @keyframes fadeInItem {
+    to { opacity: 1; }
+  }
+
+  /* Running shoes */
+  .shoes-scene {
+    display: flex; align-items: center; justify-content: center;
+  }
+  .shoe-icon {
+    font-size: 6rem;
+    filter: grayscale(0.5) brightness(0.7);
+    position: relative;
+  }
+  .dust-particles {
+    position: absolute;
+    width: 200px; height: 60px;
+    bottom: -10px; left: 50%; transform: translateX(-50%);
+  }
+  .dust-particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: rgba(200,180,150,0.4);
+    border-radius: 50%;
+    animation: float-dust 3s infinite;
+  }
+  @keyframes float-dust {
+    0% { opacity: 0; transform: translateY(0); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-30px) translateX(20px); }
+  }
+
+  /* Stuck scene -- phone in the dark */
+  .stuck-scene {
+    position: relative;
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at 50% 45%, rgba(70,100,160,0.06) 0%, #080604 60%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  .stuck-phone {
+    width: 140px; height: 260px;
+    background: #111;
+    border-radius: 24px;
+    border: 2px solid #222;
+    padding: 28px 10px 14px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 0 60px 20px rgba(80,120,200,0.06),
+      0 0 120px 50px rgba(80,120,200,0.03),
+      0 2px 20px rgba(0,0,0,0.6);
+  }
+  .stuck-phone .notch {
+    position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+    width: 50px; height: 16px;
+    background: #000; border-radius: 10px;
+  }
+  .stuck-phone .screen-time {
+    position: absolute; top: 8px; right: 10px;
+    font-size: 0.45rem;
+    color: rgba(255,255,255,0.2);
+    font-variant-numeric: tabular-nums;
+  }
+  .feed-scroll {
+    display: flex; flex-direction: column;
+    gap: 8px;
+    animation: scroll-feed 6s linear infinite;
+  }
+  .feed-item {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 8px;
+    display: flex; gap: 6px;
+    align-items: flex-start;
+  }
+  .feed-item .feed-avatar {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    opacity: 0.4;
+  }
+  .feed-item .feed-lines {
+    flex: 1; display: flex; flex-direction: column; gap: 3px;
+  }
+  .feed-line {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.06);
+  }
+  .feed-img {
+    width: 100%; height: 40px;
+    border-radius: 6px;
+    margin-top: 4px;
+    opacity: 0.15;
+  }
+  @keyframes scroll-feed {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-120px); }
+  }
+  .stuck-caption {
+    margin-top: 20px;
+    font-size: 0.7rem;
+    color: rgba(200,180,150,0.2);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.5px;
+  }
+
+  /* Notification scene */
+  .notification-card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 16px 20px;
+    width: 280px;
+    display: flex; align-items: center; gap: 14px;
+    transform: translateY(-20px);
+    opacity: 0;
+    animation: slideNotification 0.6s ease 0.5s forwards;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+  @keyframes slideNotification {
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .notif-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--coral), var(--coral-light));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 1.1rem; color: #fff;
+    flex-shrink: 0;
+  }
+  .notif-content {
+    flex: 1;
+  }
+  .notif-name {
+    font-size: 0.85rem; font-weight: 600; color: var(--cream);
+  }
+  .notif-msg {
+    font-size: 0.8rem; color: var(--cream-dim); margin-top: 2px;
+  }
+  .notif-time {
+    font-size: 0.7rem; color: rgba(200,180,150,0.4);
+    align-self: flex-start;
+  }
+
+  /* Energy shift montage */
+  .montage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 320px;
+  }
+  .montage-card {
+    background: var(--warm-bg-light);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.9);
+    border: 1px solid rgba(200,180,150,0.08);
+  }
+  .montage-card .icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+  .montage-card .label {
+    font-size: 0.75rem;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .montage-card.show {
+    animation: popIn 0.4s ease forwards;
+  }
+  @keyframes popIn {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* Coffee shop / checked list */
+  .checked-notebook {
+    width: 280px;
+    background: #F5F0E8;
+    border-radius: 4px;
+    padding: 30px 25px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+  .checked-item {
+    font-size: 0.95rem;
+    color: #5A5040;
+    padding: 8px 0 8px 0;
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+  .checked-item .check {
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* App dashboard reveal */
+  .app-dashboard {
+    width: 220px; height: 420px;
+    background: var(--phone-bg);
+    border-radius: 32px;
+    border: 3px solid #333;
+    padding: 50px 16px 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .app-dashboard .notch {
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 22px;
+    background: #000; border-radius: 12px;
+  }
+  .dash-header {
+    font-size: 0.75rem; color: var(--cream-dim);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .streak-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(232,115,90,0.15);
+    padding: 6px 12px; border-radius: 20px;
+    font-size: 0.8rem; color: var(--coral);
+    margin-bottom: 16px;
+  }
+  .goal-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .goal-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; color: #fff;
+    flex-shrink: 0;
+  }
+  .goal-text {
+    font-size: 0.75rem; color: var(--cream);
+    flex: 1;
+  }
+  .partner-thread {
+    margin-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 10px;
+  }
+  .partner-msg {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 6px;
+  }
+  .partner-msg .avatar-sm {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--coral), var(--coral-light));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.55rem; font-weight: 600; color: #fff;
+    flex-shrink: 0;
+  }
+  .partner-msg .bubble {
+    background: rgba(255,255,255,0.08);
+    padding: 6px 10px;
+    border-radius: 10px 10px 10px 4px;
+    font-size: 0.7rem;
+    color: var(--cream-dim);
+  }
+
+  /* ── TRANSITION / BLACK ── */
+  .scene-black {
+    background: #000;
+  }
+  .scene-black .transition-text {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeText 0.8s ease 0.3s forwards;
+  }
+  @keyframes fadeText {
+    to { opacity: 1; }
+  }
+
+  /* ── EXPLAINER STEP LAYOUT ── */
+  .step-layout {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    width: 85%;
+    max-width: 800px;
+  }
+  .step-number {
+    font-size: clamp(4rem, 10vw, 7rem);
+    font-weight: 700;
+    color: rgba(232,115,90,0.15);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .step-content {
+    flex: 1;
+  }
+  .step-title {
+    font-size: clamp(1rem, 2.2vw, 1.4rem);
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 8px;
+    text-transform: lowercase;
+  }
+  .step-desc {
+    font-size: clamp(0.8rem, 1.4vw, 0.95rem);
+    font-weight: 300;
+    color: var(--cream-dim);
+    line-height: 1.55;
+  }
+  .step-phone {
+    width: 180px; height: 340px;
+    background: var(--phone-bg);
+    border-radius: 28px;
+    border: 2px solid #333;
+    padding: 40px 12px 16px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .step-phone .notch {
+    position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 18px;
+    background: #000; border-radius: 10px;
+  }
+
+  /* Step 1: AI Chat */
+  .ai-chat .chat-bubble {
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    margin-bottom: 8px;
+    max-width: 90%;
+    line-height: 1.4;
+    opacity: 0;
+  }
+  .ai-chat .chat-bubble.ai {
+    background: rgba(232,115,90,0.15);
+    color: var(--coral-light);
+    border-bottom-left-radius: 4px;
+  }
+  .ai-chat .chat-bubble.user {
+    background: rgba(255,255,255,0.1);
+    color: var(--cream);
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+  }
+  .scene.active .ai-chat .chat-bubble:nth-child(1) { animation: fadeUp 0.4s ease 0.3s forwards; }
+  .scene.active .ai-chat .chat-bubble:nth-child(2) { animation: fadeUp 0.4s ease 0.8s forwards; }
+  .scene.active .ai-chat .chat-bubble:nth-child(3) { animation: fadeUp 0.4s ease 1.3s forwards; }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .ai-chat .chat-bubble { transform: translateY(8px); }
+
+  /* Step 2: Partner list */
+  .partner-list-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    opacity: 0;
+  }
+  .scene.active .partner-list-item:nth-child(1) { animation: fadeUp 0.3s ease 0.3s forwards; }
+  .scene.active .partner-list-item:nth-child(2) { animation: fadeUp 0.3s ease 0.6s forwards; }
+  .scene.active .partner-list-item:nth-child(3) { animation: fadeUp 0.3s ease 0.9s forwards; }
+  .partner-list-item .p-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem; font-weight: 600; color: #fff;
+    flex-shrink: 0;
+  }
+  .partner-list-item .p-info {
+    flex: 1;
+  }
+  .partner-list-item .p-name {
+    font-size: 0.7rem; font-weight: 500; color: var(--cream);
+  }
+  .partner-list-item .p-streak {
+    font-size: 0.6rem; color: var(--cream-dim);
+  }
+  .nudge-badge {
+    font-size: 0.55rem;
+    background: rgba(232,115,90,0.2);
+    color: var(--coral);
+    padding: 2px 6px;
+    border-radius: 8px;
+  }
+
+  /* Step 3: Nudge escalation */
+  .nudge-card {
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .nudge-card .nudge-label {
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .nudge-card .nudge-text {
+    font-size: 0.68rem;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+  .nudge-card.private .nudge-label { color: var(--gold); }
+  .nudge-card.partner .nudge-label { color: var(--coral); }
+  .scene.active .nudge-card:nth-child(1) { animation: fadeUp 0.4s ease 0.4s forwards; }
+  .scene.active .nudge-card:nth-child(2) { animation: fadeUp 0.4s ease 1.2s forwards; }
+
+  /* Step 4: Integrity Score gauge */
+  .score-gauge {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 100%;
+    gap: 12px;
+  }
+  .gauge-ring {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gauge-ring svg {
+    position: absolute; inset: 0;
+    transform: rotate(-90deg);
+  }
+  .gauge-ring svg circle {
+    fill: none;
+    stroke-width: 6;
+  }
+  .gauge-ring svg circle.bg {
+    stroke: rgba(255,255,255,0.06);
+  }
+  .gauge-ring svg circle.fill {
+    stroke: var(--coral);
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s ease;
+  }
+  .scene.active .gauge-ring svg circle.fill {
+    stroke-dashoffset: 37;
+  }
+  .gauge-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cream);
+    z-index: 2;
+  }
+  .score-breakdown {
+    width: 100%;
+  }
+  .score-item {
+    display: flex; justify-content: space-between;
+    font-size: 0.6rem;
+    padding: 3px 0;
+    color: var(--cream-dim);
+    opacity: 0;
+  }
+  .score-item .points { font-weight: 600; }
+  .score-item .points.positive { color: var(--green); }
+  .score-item .points.negative { color: var(--red); }
+  .scene.active .score-item:nth-child(1) { animation: fadeUp 0.3s ease 1s forwards; }
+  .scene.active .score-item:nth-child(2) { animation: fadeUp 0.3s ease 1.2s forwards; }
+  .scene.active .score-item:nth-child(3) { animation: fadeUp 0.3s ease 1.4s forwards; }
+
+  /* Integrity Score extended -- personal progress */
+  .score-personal {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 24px;
+    width: 80%; max-width: 400px;
+  }
+  .big-gauge {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .big-gauge svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .big-gauge svg circle { fill: none; stroke-width: 6; }
+  .big-gauge svg circle.bg { stroke: rgba(255,255,255,0.06); }
+  .big-gauge svg circle.fill {
+    stroke: var(--coral);
+    stroke-linecap: round;
+    stroke-dasharray: 377;
+    stroke-dashoffset: 377;
+    transition: stroke-dashoffset 1.8s ease;
+  }
+  .scene.active .big-gauge svg circle.fill {
+    stroke-dashoffset: 41;
+  }
+  .big-gauge .big-num {
+    font-size: 2.6rem; font-weight: 700; color: var(--cream); z-index: 2;
+  }
+  .big-gauge .score-label {
+    position: absolute;
+    bottom: -28px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--cream-dim);
+  }
+  .progress-weeks {
+    display: flex; gap: 6px;
+    align-items: flex-end;
+    height: 50px;
+    margin-top: 12px;
+  }
+  .week-bar {
+    width: 24px;
+    background: rgba(232,115,90,0.2);
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    transition: height 0.6s ease;
+  }
+  .week-bar.current {
+    background: var(--coral);
+    box-shadow: 0 0 12px rgba(232,115,90,0.3);
+  }
+  .week-bar .week-label {
+    position: absolute;
+    bottom: -18px; left: 50%; transform: translateX(-50%);
+    font-size: 0.5rem;
+    color: rgba(200,180,150,0.3);
+    white-space: nowrap;
+  }
+  .week-bar.current .week-label {
+    color: var(--coral-light);
+  }
+  .personal-tagline {
+    font-size: 0.75rem;
+    color: var(--cream-dim);
+    font-weight: 300;
+    font-style: italic;
+    margin-top: 8px;
+    opacity: 0;
+    transition: opacity 0.8s ease 1.2s;
+  }
+  .scene.active .personal-tagline {
+    opacity: 1;
+  }
+
+  /* Payoff */
+  .payoff-text {
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: center;
+    max-width: 600px;
+    opacity: 0;
+    animation: fadeText 0.8s ease 0.3s forwards;
+  }
+  .payoff-text .highlight {
+    color: var(--coral);
+    font-weight: 600;
+  }
+
+  /* End card */
+  .end-card {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 16px;
+    text-align: center;
+  }
+  .logo-mark {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 8px;
+  }
+  .logo-ring {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 3px solid var(--coral);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    animation: pulse-logo 2s ease infinite;
+  }
+  @keyframes pulse-logo {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,115,90,0.3); }
+    50% { box-shadow: 0 0 0 12px rgba(232,115,90,0); }
+  }
+  .logo-ring .inner-ring {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--coral-light);
+  }
+  .logo-name {
+    font-size: 1.5rem; font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--cream);
+    text-transform: lowercase;
+  }
+  .tagline {
+    font-size: 0.9rem;
+    color: var(--cream-dim);
+    font-weight: 300;
+    font-style: italic;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: var(--coral);
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    margin-top: 8px;
+    box-shadow: 0 4px 20px rgba(232,115,90,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(232,115,90,0.4);
+  }
+  .platforms {
+    font-size: 0.75rem; color: var(--cream-dim);
+    font-weight: 300;
+  }
+  .coach-line {
+    font-size: 0.7rem;
+    color: rgba(200,180,150,0.5);
+    margin-top: 4px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: var(--coral);
+    z-index: 100;
+    transition: width 0.1s linear;
+  }
+
+  /* ── CONTROLS ── */
+  #controls {
+    position: absolute;
+    top: 20px; right: 24px;
+    display: flex; gap: 12px;
+    z-index: 100;
+  }
+  .ctrl-btn {
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--cream);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .ctrl-btn:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  /* Timer display */
+  #timer {
+    position: absolute;
+    top: 24px; left: 24px;
+    font-size: 0.75rem;
+    color: rgba(200,180,150,0.4);
+    font-variant-numeric: tabular-nums;
+    z-index: 100;
+  }
+
+  /* Part label */
+  .part-label {
+    position: absolute;
+    top: 24px; left: 50%; transform: translateX(-50%);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(200,180,150,0.25);
+    z-index: 100;
+  }
+
+  /* Grain overlay */
+  #grain {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.6;
+  }
+
+  /* Start overlay */
+  #start-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px;
+    z-index: 200;
+    cursor: pointer;
+  }
+  #start-overlay .play-btn {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 2px solid var(--coral);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.3s, transform 0.2s;
+  }
+  #start-overlay .play-btn:hover {
+    background: rgba(232,115,90,0.15);
+    transform: scale(1.05);
+  }
+  #start-overlay .play-btn svg {
+    width: 30px; height: 30px;
+    fill: var(--coral);
+    margin-left: 4px;
+  }
+  #start-overlay .start-label {
+    font-size: 0.8rem;
+    color: var(--cream-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .hidden { display: none !important; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .step-layout { flex-direction: column; gap: 20px; }
+    .step-phone { width: 160px; height: 300px; }
+    .progress-weeks { gap: 4px; }
+    .week-bar { width: 18px; }
+    .montage-grid { width: 260px; }
+    .phone-frame { width: 180px; height: 350px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="player">
+  <div id="grain"></div>
+
+  <!-- Start Overlay -->
+  <div id="start-overlay">
+    <div class="play-btn">
+      <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+    </div>
+    <div class="start-label">Play Teaser</div>
+  </div>
+
+  <!-- Timer -->
+  <div id="timer">0:00 / 1:00</div>
+  <div id="part-label" class="part-label"></div>
+
+  <!-- Controls -->
+  <div id="controls">
+    <div class="ctrl-btn" id="btn-play" title="Play/Pause">&#9654;</div>
+    <div class="ctrl-btn" id="btn-restart" title="Restart">&#8634;</div>
+  </div>
+
+  <!-- Progress -->
+  <div id="progress-bar" style="width:0%"></div>
+
+  <!-- ══════════════════════════════════════════
+       PART 1: THE HOOK  (0:00 – 0:27)
+       ══════════════════════════════════════════ -->
+
+  <!-- Scene 0: 0:00-0:03 — Alarm snooze -->
+  <div class="scene" id="s0">
+    <div class="visual-area">
+      <div class="phone-frame">
+        <div class="notch"></div>
+        <div class="alarm-screen">
+          <div class="alarm-time">6:30</div>
+          <div class="alarm-label">Morning Alarm</div>
+          <div class="alarm-btn"><span>Snooze</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="text-overlay">
+      <div class="main-text">I said I'd wake up early.</div>
+    </div>
+  </div>
+
+  <!-- Scene 1: 0:03-0:06 — Notebook -->
+  <div class="scene" id="s1">
+    <div class="visual-area">
+      <div class="notebook">
+        <div class="todo-item" style="animation-delay:0.2s">
+          <div class="checkbox"></div>
+          <span>Start running again</span>
+        </div>
+        <div class="todo-item" style="animation-delay:0.5s">
+          <div class="checkbox"></div>
+          <span>Finish the book proposal</span>
+        </div>
+        <div class="todo-item" style="animation-delay:0.8s">
+          <div class="checkbox"></div>
+          <span>Have the conversation</span>
+        </div>
+        <div class="todo-item" style="animation-delay:1.1s">
+          <div class="checkbox"></div>
+          <span>Meal prep Sundays</span>
+        </div>
+        <div class="coffee-ring"></div>
+      </div>
+    </div>
+    <div class="text-overlay">
+      <div class="main-text">I said I'd finish this.</div>
+    </div>
+  </div>
+
+  <!-- Scene 2: 0:06-0:09 — Running shoes -->
+  <div class="scene" id="s2">
+    <div class="visual-area shoes-scene">
+      <div style="position:relative; display:flex; align-items:center; justify-content:center;">
+        <div class="shoe-icon">&#128095;</div>
+        <div class="dust-particles">
+          <div class="dust-particle" style="left:20%; animation-delay:0s"></div>
+          <div class="dust-particle" style="left:40%; animation-delay:0.5s"></div>
+          <div class="dust-particle" style="left:60%; animation-delay:1s"></div>
+          <div class="dust-particle" style="left:80%; animation-delay:1.5s"></div>
+        </div>
+      </div>
+    </div>
+    <div class="text-overlay">
+      <div class="main-text">I said I'd start again.</div>
+    </div>
+  </div>
+
+  <!-- Scene 3: 0:09-0:12 — Stuck scrolling -->
+  <div class="scene" id="s3">
+    <div class="stuck-scene">
+      <div class="stuck-phone">
+        <div class="notch"></div>
+        <div class="screen-time">47 min</div>
+        <div class="feed-scroll">
+          <div class="feed-item">
+            <div class="feed-avatar" style="background:#4A6A8A"></div>
+            <div class="feed-lines">
+              <div class="feed-line" style="width:80%"></div>
+              <div class="feed-line" style="width:55%"></div>
+              <div class="feed-img" style="background:#2A3A4A"></div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <div class="feed-avatar" style="background:#6A5A4A"></div>
+            <div class="feed-lines">
+              <div class="feed-line" style="width:70%"></div>
+              <div class="feed-line" style="width:90%"></div>
+              <div class="feed-line" style="width:40%"></div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <div class="feed-avatar" style="background:#5A7A5A"></div>
+            <div class="feed-lines">
+              <div class="feed-line" style="width:60%"></div>
+              <div class="feed-img" style="background:#3A4A3A; height:50px"></div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <div class="feed-avatar" style="background:#7A5A6A"></div>
+            <div class="feed-lines">
+              <div class="feed-line" style="width:85%"></div>
+              <div class="feed-line" style="width:50%"></div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <div class="feed-avatar" style="background:#5A5A7A"></div>
+            <div class="feed-lines">
+              <div class="feed-line" style="width:75%"></div>
+              <div class="feed-line" style="width:65%"></div>
+              <div class="feed-img" style="background:#3A3A5A"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stuck-caption">47 minutes and counting</div>
+    </div>
+    <div class="text-overlay">
+      <div class="main-text">We all have a list of things we said we'd do.</div>
+    </div>
+  </div>
+
+  <!-- Scene 4: 0:12-0:15 — The notification -->
+  <div class="scene" id="s4">
+    <div class="visual-area">
+      <div class="notification-card">
+        <div class="notif-avatar">N</div>
+        <div class="notif-content">
+          <div class="notif-name">Nakisha</div>
+          <div class="notif-msg">Hey. Did you go?</div>
+        </div>
+        <div class="notif-time">now</div>
+      </div>
+    </div>
+    <div class="text-overlay">
+      <div class="main-text">What if someone <span class="coral">actually</span> asked?</div>
+    </div>
+  </div>
+
+  <!-- Scene 5: 0:15-0:18 — Energy shift: lacing up -->
+  <div class="scene" id="s5">
+    <div class="visual-area">
+      <div class="montage-grid">
+        <div class="montage-card" id="mc0">
+          <div class="icon">&#128095;</div>
+          <div class="label">Lacing up</div>
+        </div>
+        <div class="montage-card" id="mc1">
+          <div class="icon">&#9889;</div>
+          <div class="label">Moving</div>
+        </div>
+        <div class="montage-card" id="mc2">
+          <div class="icon">&#128187;</div>
+          <div class="label">Writing</div>
+        </div>
+        <div class="montage-card" id="mc3">
+          <div class="icon">&#9989;</div>
+          <div class="label">Done</div>
+        </div>
+      </div>
+    </div>
+    <div class="text-overlay">
+      <div class="main-text">Not motivation. Not willpower.</div>
+    </div>
+  </div>
+
+  <!-- Scene 6: 0:21-0:24 — Coffee shop, checked list -->
+  <div class="scene" id="s6">
+    <div class="visual-area">
+      <div class="checked-notebook">
+        <div class="checked-item"><span class="check">&#10003;</span>Start running again</div>
+        <div class="checked-item"><span class="check">&#10003;</span>Finish the book proposal</div>
+        <div class="checked-item"><span class="check">&#10003;</span>Have the conversation</div>
+        <div class="checked-item"><span class="check">&#10003;</span>Meal prep Sundays</div>
+      </div>
+    </div>
+    <div class="text-overlay">
+      <div class="main-text">Just someone in your corner.</div>
+    </div>
+  </div>
+
+  <!-- Scene 7: 0:24-0:27 — App dashboard reveal -->
+  <div class="scene" id="s7">
+    <div class="visual-area">
+      <div class="app-dashboard">
+        <div class="notch"></div>
+        <div class="dash-header">Your Dashboard</div>
+        <div class="streak-badge">&#128293; 12-day streak</div>
+        <div class="goal-item">
+          <div class="goal-check">&#10003;</div>
+          <div class="goal-text">Morning run -- 3.2 mi</div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-check">&#10003;</div>
+          <div class="goal-text">Read 20 pages</div>
+        </div>
+        <div class="goal-item" style="opacity:0.5;">
+          <div class="goal-check" style="background:rgba(255,255,255,0.1);">&#8226;</div>
+          <div class="goal-text">Meal prep</div>
+        </div>
+        <div class="partner-thread">
+          <div class="partner-msg">
+            <div class="avatar-sm">N</div>
+            <div class="bubble">3 days straight! &#128293;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-overlay">
+      <div class="main-text" style="font-size:0.85rem; color:var(--cream-dim)">The app should feel real and lived-in.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TRANSITION  (0:27 – 0:30)
+       ══════════════════════════════════════════ -->
+  <div class="scene scene-black" id="s8">
+    <div class="transition-text">Here's how it works.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PART 2: HOW IT WORKS  (0:30 – 1:00)
+       ══════════════════════════════════════════ -->
+
+  <!-- Scene 9: 0:30-0:36 — Step 1: Set Your Goals -->
+  <div class="scene" id="s9">
+    <div class="step-layout">
+      <div class="step-number">01</div>
+      <div class="step-content">
+        <div class="step-title">set your goals</div>
+        <div class="step-desc">Tell the AI what you want to accomplish. It breaks big goals into concrete steps.</div>
+      </div>
+      <div class="step-phone">
+        <div class="notch"></div>
+        <div class="ai-chat">
+          <div class="chat-bubble ai">What's a goal you've been putting off?</div>
+          <div class="chat-bubble user">I want to run a 5K by June.</div>
+          <div class="chat-bubble ai">Let's start with 3 runs this week. I'll set your first one for tomorrow at 7 AM.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 10: 0:36-0:42 — Step 2: Pick Your People -->
+  <div class="scene" id="s10">
+    <div class="step-layout">
+      <div class="step-number">02</div>
+      <div class="step-content">
+        <div class="step-title">pick your people</div>
+        <div class="step-desc">Invite friends, family, or coworkers. They see your progress. You see theirs (if they allow).</div>
+      </div>
+      <div class="step-phone">
+        <div class="notch"></div>
+        <div>
+          <div class="partner-list-item">
+            <div class="p-avatar" style="background:linear-gradient(135deg,var(--coral),var(--coral-light))">N</div>
+            <div class="p-info">
+              <div class="p-name">Nakisha</div>
+              <div class="p-streak">&#128293; 18-day streak</div>
+            </div>
+          </div>
+          <div class="partner-list-item">
+            <div class="p-avatar" style="background:linear-gradient(135deg,#4A90D9,#7BB3F0)">M</div>
+            <div class="p-info">
+              <div class="p-name">Marcus</div>
+              <div class="p-streak">&#128293; 9-day streak</div>
+            </div>
+            <div class="nudge-badge">Nudged you</div>
+          </div>
+          <div class="partner-list-item">
+            <div class="p-avatar" style="background:linear-gradient(135deg,var(--green),#7DD4A0)">J</div>
+            <div class="p-info">
+              <div class="p-name">Jordan</div>
+              <div class="p-streak">&#128293; 5-day streak</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 11: 0:42-0:48 — Step 3: Get Nudged -->
+  <div class="scene" id="s11">
+    <div class="step-layout">
+      <div class="step-number">03</div>
+      <div class="step-content">
+        <div class="step-title">get nudged, not nagged</div>
+        <div class="step-desc">First the app nudges you privately. If no action is taken your partner is notified. That tension is the real motivator.</div>
+      </div>
+      <div class="step-phone">
+        <div class="notch"></div>
+        <div>
+          <div class="nudge-card private">
+            <div class="nudge-label">&#128274; Private nudge</div>
+            <div class="nudge-text">You haven't logged your run yet. Still time today.</div>
+          </div>
+          <div class="nudge-card partner">
+            <div class="nudge-label">&#128101; Partner alert</div>
+            <div class="nudge-text">Nakisha can now see you missed today's run.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 12: 0:48-0:52 — Step 4: Integrity Score -->
+  <div class="scene" id="s12">
+    <div class="step-layout">
+      <div class="step-number">04</div>
+      <div class="step-content">
+        <div class="step-title">build your integrity score</div>
+        <div class="step-desc">Every follow-through builds your score. It's your reputation with yourself.</div>
+      </div>
+      <div class="step-phone">
+        <div class="notch"></div>
+        <div class="score-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 100 100">
+              <circle class="bg" cx="50" cy="50" r="45"/>
+              <circle class="fill" cx="50" cy="50" r="45"/>
+            </svg>
+            <div class="gauge-number" id="score-num">0</div>
+          </div>
+          <div class="score-breakdown">
+            <div class="score-item">
+              <span>Morning run</span>
+              <span class="points positive">+2</span>
+            </div>
+            <div class="score-item">
+              <span>Read 20 pages</span>
+              <span class="points positive">+1</span>
+            </div>
+            <div class="score-item">
+              <span>Missed meal prep</span>
+              <span class="points negative">-1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 13: 0:52-0:55 — Integrity Score Extended (Personal Progress) -->
+  <div class="scene" id="s13">
+    <div class="score-personal">
+      <div class="big-gauge">
+        <svg viewBox="0 0 140 140">
+          <circle class="bg" cx="70" cy="70" r="60"/>
+          <circle class="fill" cx="70" cy="70" r="60"/>
+        </svg>
+        <div class="big-num" id="personal-score">0</div>
+        <div class="score-label">Integrity Score</div>
+      </div>
+      <div class="progress-weeks" id="progress-weeks">
+        <div class="week-bar" style="height:14px"><div class="week-label">W1</div></div>
+        <div class="week-bar" style="height:22px"><div class="week-label">W2</div></div>
+        <div class="week-bar" style="height:18px"><div class="week-label">W3</div></div>
+        <div class="week-bar" style="height:30px"><div class="week-label">W4</div></div>
+        <div class="week-bar" style="height:34px"><div class="week-label">W5</div></div>
+        <div class="week-bar" style="height:28px"><div class="week-label">W6</div></div>
+        <div class="week-bar" style="height:38px"><div class="week-label">W7</div></div>
+        <div class="week-bar current" style="height:44px"><div class="week-label">W8</div></div>
+      </div>
+      <div class="personal-tagline">Becoming the person you said you'd be.</div>
+    </div>
+    <div class="text-overlay">
+      <div class="main-text">How well you're keeping your promises to yourself.</div>
+    </div>
+  </div>
+
+  <!-- Scene 14: 0:55-0:57 — Payoff -->
+  <div class="scene scene-black" id="s14">
+    <div class="payoff-text">The result? You <span class="highlight">actually</span> do the things you said you would.</div>
+  </div>
+
+  <!-- Scene 15: 0:57-1:00 — End Card -->
+  <div class="scene" id="s15" style="background: var(--cream); color: var(--warm-bg);">
+    <div class="end-card">
+      <div class="logo-mark">
+        <div class="logo-ring">
+          <div class="inner-ring"></div>
+        </div>
+        <div class="logo-name" style="color: var(--warm-bg);">accountable me</div>
+      </div>
+      <div class="tagline" style="color: #6B5E50;">Accountability, Together.</div>
+      <a class="cta-btn" href="https://accountableme.net" target="_blank">Join the Beta</a>
+      <div class="platforms" style="color: #9B8E80;">Coming to iOS + Android</div>
+      <div class="coach-line" style="color: #B0A890;">Coaches and therapists: accountableme.net/coaches</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  // Scene timeline: [startMs, endMs]
+  const scenes = [
+    [0,     3000],   // s0:  alarm
+    [3000,  6000],   // s1:  notebook
+    [6000,  9000],   // s2:  shoes
+    [9000,  12000],  // s3:  stuck
+    [12000, 15000],  // s4:  notification
+    [15000, 18000],  // s5:  energy montage
+    [18000, 21000],  // s6:  coffee checked list (combined 0:18-0:24)
+    [21000, 27000],  // s7:  app dashboard
+    [27000, 30000],  // s8:  transition
+    [30000, 36000],  // s9:  step 1
+    [36000, 42000],  // s10: step 2
+    [42000, 48000],  // s11: step 3
+    [48000, 52000],  // s12: step 4 integrity
+    [52000, 55000],  // s13: integrity extended
+    [55000, 57000],  // s14: payoff
+    [57000, 60000],  // s15: end card
+  ];
+
+  const TOTAL = 60000;
+  let startTime = null;
+  let elapsed = 0;
+  let playing = false;
+  let animFrame = null;
+  let currentScene = -1;
+  let scoreAnimated = false;
+  let extScoreAnimated = false;
+
+  const els = scenes.map((_, i) => document.getElementById('s' + i));
+  const progressBar = document.getElementById('progress-bar');
+  const timerEl = document.getElementById('timer');
+  const partLabel = document.getElementById('part-label');
+  const btnPlay = document.getElementById('btn-play');
+  const btnRestart = document.getElementById('btn-restart');
+  const startOverlay = document.getElementById('start-overlay');
+
+  function formatTime(ms) {
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  function setScene(idx) {
+    if (idx === currentScene) return;
+    currentScene = idx;
+    els.forEach((el, i) => {
+      if (i === idx) el.classList.add('active');
+      else el.classList.remove('active');
+    });
+    // Part label
+    if (idx <= 7) partLabel.textContent = 'Part 1 -- The Hook';
+    else if (idx === 8) partLabel.textContent = '';
+    else partLabel.textContent = 'Part 2 -- How It Works';
+    // Montage cards animation
+    if (idx === 5) {
+      ['mc0','mc1','mc2','mc3'].forEach((id, j) => {
+        setTimeout(() => document.getElementById(id).classList.add('show'), j * 300);
+      });
+    }
+    // Integrity Score counter
+    if (idx === 12 && !scoreAnimated) {
+      scoreAnimated = true;
+      animateCounter('score-num', 0, 87, 1200);
+    }
+    // Personal score progress
+    if (idx === 13 && !extScoreAnimated) {
+      extScoreAnimated = true;
+      animateCounter('personal-score', 0, 89, 1500);
+    }
+  }
+
+  function animateCounter(id, from, to, duration) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const start = performance.now();
+    function step(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(from + (to - from) * eased);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function tick(ts) {
+    if (!playing) return;
+    if (!startTime) startTime = ts;
+    elapsed = ts - startTime;
+    if (elapsed >= TOTAL) {
+      elapsed = TOTAL;
+      playing = false;
+      btnPlay.innerHTML = '&#9654;';
+    }
+    // Update UI
+    progressBar.style.width = (elapsed / TOTAL * 100) + '%';
+    timerEl.textContent = formatTime(elapsed) + ' / 1:00';
+    // Determine active scene
+    for (let i = scenes.length - 1; i >= 0; i--) {
+      if (elapsed >= scenes[i][0]) {
+        setScene(i);
+        break;
+      }
+    }
+    if (playing) animFrame = requestAnimationFrame(tick);
+  }
+
+  function play() {
+    if (elapsed >= TOTAL) return;
+    playing = true;
+    startTime = null;
+    const savedElapsed = elapsed;
+    startTime = null;
+    btnPlay.innerHTML = '&#10074;&#10074;';
+    animFrame = requestAnimationFrame(function firstTick(ts) {
+      startTime = ts - savedElapsed;
+      tick(ts);
+    });
+  }
+
+  function pause() {
+    playing = false;
+    btnPlay.innerHTML = '&#9654;';
+    if (animFrame) cancelAnimationFrame(animFrame);
+  }
+
+  function restart() {
+    pause();
+    elapsed = 0;
+    currentScene = -1;
+    scoreAnimated = false;
+    extScoreAnimated = false;
+    progressBar.style.width = '0%';
+    timerEl.textContent = '0:00 / 1:00';
+    partLabel.textContent = '';
+    els.forEach(el => el.classList.remove('active'));
+    ['mc0','mc1','mc2','mc3'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('show');
+    });
+    // Reset gauge fills
+    document.querySelectorAll('.gauge-ring .fill, .big-gauge .fill').forEach(c => {
+      const r = parseFloat(c.getAttribute('r'));
+      c.style.strokeDashoffset = r ? r * 2 * Math.PI : 283;
+    });
+    play();
+  }
+
+  startOverlay.addEventListener('click', function() {
+    startOverlay.classList.add('hidden');
+    play();
+  });
+
+  btnPlay.addEventListener('click', function() {
+    if (playing) pause();
+    else {
+      if (elapsed >= TOTAL) { elapsed = 0; currentScene = -1; scoreAnimated = false; extScoreAnimated = false; }
+      play();
+    }
+  });
+
+  btnRestart.addEventListener('click', restart);
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (!startOverlay.classList.contains('hidden')) {
+        startOverlay.classList.add('hidden');
+        play();
+      } else {
+        if (playing) pause(); else play();
+      }
+    }
+    if (e.code === 'KeyR') restart();
+  });
+})();
+</script>
+
+</body>
+</html>

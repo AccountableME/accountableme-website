@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AccountableME | Accountability, Together</title>
+<meta name="description" content="AccountableME helps you actually follow through on your personal goals with AI tracking and real human accountability built in. Research-backed. Sign up for the beta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ==============================
+   RESET & BASE
+   ============================== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1A1A2E; background: #FAFAF9; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+/* ==============================
+   LAYOUT
+   ============================== */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 100px 0; }
+.section.tight { padding: 72px 0; }
+
+/* ==============================
+   NAV
+   ============================== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(250,250,249,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  padding: 16px 0;
+}
+nav .container { display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-size: 20px; font-weight: 300; letter-spacing: -0.5px; }
+.nav-logo strong { font-weight: 900; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { font-size: 14px; font-weight: 500; color: #64748B; transition: color 0.2s; }
+.nav-links a:hover { color: #1A1A2E; }
+.nav-cta {
+  background: #E85D4A; color: white !important; padding: 10px 20px; border-radius: 8px;
+  font-weight: 600; font-size: 14px; transition: background 0.2s;
+}
+.nav-cta:hover { background: #D44A38; }
+
+/* ==============================
+   HERO
+   ============================== */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding-top: 80px; padding-bottom: 48px;
+  background: linear-gradient(180deg, #FAFAF9 0%, #F0EFEB 100%);
+}
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.hero-tagline {
+  font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: #E85D4A; margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 52px; font-weight: 800; letter-spacing: -2px; line-height: 1.1;
+  margin-bottom: 24px;
+}
+.hero h1 em { font-style: normal; color: #E85D4A; }
+.hero-sub {
+  font-size: 18px; font-weight: 400; color: #64748B; line-height: 1.7;
+  margin-bottom: 36px; max-width: 480px;
+}
+.hero-form { display: flex; gap: 12px; max-width: 440px; }
+.hero-input {
+  flex: 1; padding: 14px 18px; border: 2px solid #E2E8F0; border-radius: 10px;
+  font-family: inherit; font-size: 15px; outline: none; transition: border 0.2s;
+}
+.hero-input:focus { border-color: #E85D4A; }
+.hero-btn {
+  background: #E85D4A; color: white; border: none; padding: 14px 28px;
+  border-radius: 10px; font-family: inherit; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: background 0.2s; white-space: nowrap;
+}
+.hero-btn:hover { background: #D44A38; }
+.hero-note { font-size: 12px; color: #94A3B8; margin-top: 12px; }
+.sms-consent { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; max-width: 440px; }
+.sms-consent input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: #E85D4A; }
+.sms-consent label { font-size: 12px; color: #64748B; line-height: 1.4; }
+.sms-consent label a { color: #E85D4A; text-decoration: underline; }
+.final-cta .sms-consent { margin: 10px auto 0; }
+.final-cta .sms-consent label { color: rgba(255,255,255,0.5); }
+.final-cta .sms-consent label a { color: #F09080; }
+.hero-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Phone mockup */
+.hero-phone {
+  width: 320px; height: 640px; background: #fff; border-radius: 36px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+  padding: 48px 20px 20px; overflow: hidden;
+  margin: 0 auto;
+}
+.hp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.hp-greeting { font-size: 12px; color: #8E8E9A; }
+.hp-name { font-size: 20px; font-weight: 700; }
+.hp-streak { background: linear-gradient(135deg, #E85D4A, #D44A38); color: white; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 16px; }
+.hp-stats { display: flex; gap: 8px; margin-bottom: 16px; }
+.hp-stat { flex: 1; background: #F8FAFC; border-radius: 10px; padding: 10px; text-align: center; }
+.hp-stat-val { font-size: 20px; font-weight: 800; }
+.hp-stat-val.coral { color: #E85D4A; }
+.hp-stat-label { font-size: 9px; color: #8E8E9A; margin-top: 2px; }
+.hp-goal { background: #F0FDF4; border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.hp-check { width: 20px; height: 20px; border-radius: 50%; background: #10B981; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.hp-goal-text { font-size: 12px; font-weight: 500; color: #1A1A2E; }
+.hp-goal-sub { font-size: 10px; color: #8E8E9A; }
+.hp-goal-pending { background: #FEFCE8; }
+.hp-check-pending { background: #F59E0B; }
+.hp-partner { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 8px 12px; background: #FFF7ED; border-radius: 10px; }
+.hp-avatar { width: 24px; height: 24px; border-radius: 50%; background: #E85D4A; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 700; }
+.hp-partner-text { font-size: 11px; color: #6A6A7A; }
+.hp-partner-text strong { color: #1A1A2E; }
+
+/* ==============================
+   PROBLEM SECTION
+   ============================== */
+.problem { background: #FAFAF9; }
+.problem-inner { max-width: 720px; margin: 0 auto; text-align: center; }
+.problem h2 { font-size: 36px; font-weight: 700; letter-spacing: -1px; margin-bottom: 24px; line-height: 1.2; }
+.problem h2 em { font-style: normal; color: #E85D4A; }
+.problem p { font-size: 18px; color: #64748B; line-height: 1.8; margin-bottom: 16px; }
+.problem .quote {
+  font-size: 22px; font-weight: 500; font-style: italic; color: #1A1A2E;
+  border-left: 3px solid #E85D4A; padding-left: 24px; margin: 40px 0;
+  text-align: left;
+}
+.problem .attribution { font-size: 14px; color: #E85D4A; font-style: normal; margin-top: 8px; display: block; }
+
+/* ==============================
+   HOW IT WORKS
+   ============================== */
+.how { background: #F0EFEB; }
+.how h2 { font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 12px; letter-spacing: -1px; }
+.how .subtitle { text-align: center; font-size: 18px; color: #64748B; margin-bottom: 64px; }
+.steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; }
+.step { display: flex; gap: 20px; }
+.step-num { font-size: 48px; font-weight: 900; color: rgba(232,93,74,0.15); line-height: 1; flex-shrink: 0; }
+.step-content h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.step-content p { font-size: 15px; color: #64748B; line-height: 1.7; }
+
+/* ==============================
+   INTEGRITY SCORE FEATURE
+   ============================== */
+.integrity-feature { background: linear-gradient(180deg, #F8FAFC, #FAFAF9); }
+.integrity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.integrity-feature h2 { font-size: 36px; font-weight: 700; letter-spacing: -1px; margin-bottom: 16px; }
+.integrity-feature .lead { font-size: 18px; color: #E85D4A; font-weight: 500; margin-bottom: 16px; }
+.integrity-feature p { font-size: 16px; color: #64748B; line-height: 1.8; margin-bottom: 16px; }
+.integrity-feature .mirror { color: #1A1A2E; font-weight: 500; font-size: 17px; }
+.score-visual {
+  width: 300px; height: 300px; border-radius: 50%;
+  background: white; box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  margin: 0 auto; position: relative;
+}
+.score-number { font-size: 80px; font-weight: 900; color: #E85D4A; line-height: 1; }
+.score-label { font-size: 14px; color: #8E8E9A; margin-top: 4px; }
+.score-sub { font-size: 13px; color: #10B981; font-weight: 600; margin-top: 8px; }
+.score-ring {
+  position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px;
+  border-radius: 50%; border: 4px solid #F0F0F0;
+  border-top-color: #E85D4A; border-right-color: #E85D4A; border-bottom-color: #E85D4A;
+  transform: rotate(-30deg);
+}
+.score-breakdown {
+  display: flex; gap: 16px; justify-content: center; margin-top: 24px;
+}
+.score-item {
+  background: white; border-radius: 8px; padding: 8px 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06); font-size: 12px; font-weight: 500;
+}
+.score-item.pos { color: #10B981; }
+.score-item.neg { color: #EF4444; }
+
+/* ==============================
+   WHY IT WORKS (RESEARCH)
+   ============================== */
+.why-works { background: #F0EFEB; }
+.why-works h2 { font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 12px; letter-spacing: -1px; }
+.why-works .subtitle { text-align: center; font-size: 18px; color: #64748B; margin-bottom: 56px; }
+.research-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 40px; }
+.research-card {
+  background: white; border-radius: 12px; padding: 28px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.research-stat { font-size: 28px; font-weight: 900; color: #E85D4A; margin-bottom: 8px; }
+.research-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #1A1A2E; }
+.research-card p { font-size: 14px; color: #64748B; line-height: 1.6; }
+.research-card .source { font-size: 11px; color: #94A3B8; margin-top: 10px; font-style: italic; }
+.why-works .takeaway {
+  max-width: 640px; margin: 0 auto; text-align: center;
+  font-size: 18px; color: #1A1A2E; font-weight: 500; line-height: 1.7;
+}
+
+/* ==============================
+   VIDEO SECTION
+   ============================== */
+.video-section { background: #0A0A0F; color: white; text-align: center; }
+.video-section h2 { font-size: 36px; font-weight: 700; margin-bottom: 12px; letter-spacing: -1px; }
+.video-section .subtitle { font-size: 18px; color: rgba(255,255,255,0.5); margin-bottom: 48px; }
+.video-wrapper {
+  max-width: 500px; margin: 0 auto;
+  border-radius: 24px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.video-wrapper iframe {
+  width: 100%; aspect-ratio: 9/16; border: none; display: block;
+  border-radius: 24px;
+}
+
+/* ==============================
+   OBJECTION / WHY PAY
+   ============================== */
+.objection { background: #1A1A2E; color: white; }
+.objection-inner { max-width: 720px; margin: 0 auto; }
+.objection h2 { font-size: 28px; font-weight: 700; margin-bottom: 24px; text-align: center; }
+.objection h2 em { font-style: normal; color: #E85D4A; }
+.objection p { font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.8; margin-bottom: 16px; }
+.objection .highlight {
+  font-size: 18px; font-weight: 600; color: white; margin-top: 24px;
+}
+.objection .highlight em { font-style: normal; color: #E85D4A; }
+
+/* ==============================
+   COACH PORTAL
+   ============================== */
+.coach-portal { background: #FAFAF9; }
+.coach-inner { max-width: 840px; margin: 0 auto; }
+.coach-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.coach-portal h2 { font-size: 32px; font-weight: 700; letter-spacing: -1px; margin-bottom: 12px; }
+.coach-portal .lead { font-size: 15px; color: #E85D4A; font-weight: 600; margin-bottom: 16px; }
+.coach-portal p { font-size: 15px; color: #64748B; line-height: 1.8; margin-bottom: 12px; }
+.coach-features {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px;
+}
+.coach-feat {
+  background: white; border-radius: 10px; padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.coach-feat .cf-icon { font-size: 20px; margin-bottom: 6px; }
+.coach-feat h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.coach-feat p { font-size: 12px; color: #8E8E9A; margin: 0; line-height: 1.5; }
+.coach-cta {
+  display: inline-block; margin-top: 20px; padding: 12px 24px;
+  background: #1A1A2E; color: white; border-radius: 8px;
+  font-size: 14px; font-weight: 600; transition: background 0.2s;
+}
+.coach-cta:hover { background: #2d2d4e; }
+
+/* ==============================
+   FOUNDERS
+   ============================== */
+.founders { background: #F8FAFC; }
+.founders h2 { font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 12px; letter-spacing: -1px; }
+.founders .subtitle { text-align: center; font-size: 18px; color: #64748B; margin-bottom: 56px; }
+.founders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.founder-card {
+  background: white; border-radius: 16px; padding: 36px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+}
+.founder-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.founder-card .role { font-size: 13px; color: #E85D4A; font-weight: 600; margin-bottom: 16px; }
+.founder-card p { font-size: 14px; color: #64748B; line-height: 1.7; }
+.founders-story-block {
+  max-width: 760px; margin: 56px auto 0; background: white; border-radius: 16px;
+  padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-left: 4px solid #E85D4A;
+}
+.founders-story-block h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: #E85D4A; }
+.founders-story-block p {
+  font-size: 15px; color: #4A4A5A; line-height: 1.8; margin-bottom: 12px;
+}
+.founders-story-block p:last-child { margin-bottom: 0; }
+.founders-story-block em { font-style: italic; color: #1A1A2E; }
+
+/* ==============================
+   PRICING
+   ============================== */
+.pricing { background: #FAFAF9; }
+.pricing h2 { font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 12px; letter-spacing: -1px; }
+.pricing .subtitle { text-align: center; font-size: 18px; color: #64748B; margin-bottom: 56px; }
+.pricing-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
+.price-card {
+  background: white; border-radius: 16px; padding: 32px; text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  border: 2px solid transparent;
+}
+.price-card.featured { border-color: #E85D4A; position: relative; }
+.price-card.featured::before {
+  content: 'Most Popular'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: #E85D4A; color: white; font-size: 11px; font-weight: 700;
+  padding: 4px 16px; border-radius: 20px; letter-spacing: 0.5px;
+}
+.price-card .badge { font-size: 11px; font-weight: 700; color: #E85D4A; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.price-card .amount { font-size: 44px; font-weight: 900; color: #1A1A2E; }
+.price-card .period { font-size: 14px; color: #8E8E9A; }
+.price-card .equiv { font-size: 13px; color: #10B981; font-weight: 600; margin-top: 4px; margin-bottom: 20px; min-height: 20px; }
+.price-card ul { list-style: none; text-align: left; margin-bottom: 24px; }
+.price-card li { font-size: 13px; color: #4A4A5A; padding: 5px 0; display: flex; align-items: center; gap: 8px; }
+.price-card li::before { content: "\2713"; color: #10B981; font-weight: 700; font-size: 12px; }
+.price-card .card-btn {
+  display: block; width: 100%; padding: 12px; border-radius: 8px;
+  font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+  border: 2px solid #E2E8F0; background: white; color: #1A1A2E; transition: all 0.2s;
+}
+.price-card.featured .card-btn { background: #E85D4A; border-color: #E85D4A; color: white; }
+.price-card .card-btn:hover { transform: translateY(-1px); }
+.pricing-note { text-align: center; font-size: 14px; color: #8E8E9A; margin-top: 24px; }
+
+/* ==============================
+   FINAL CTA
+   ============================== */
+.final-cta {
+  background: linear-gradient(135deg, #1A1A2E, #2D1B2E);
+  color: white; text-align: center;
+  padding: 120px 0;
+}
+.final-cta h2 { font-size: 40px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
+.final-cta h2 em { font-style: normal; color: #E85D4A; }
+.final-cta p { font-size: 18px; color: rgba(255,255,255,0.6); margin-bottom: 36px; }
+.final-cta .hero-form { max-width: 440px; margin: 0 auto; }
+.final-cta .hero-input { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); color: white; }
+.final-cta .hero-input::placeholder { color: rgba(255,255,255,0.4); }
+.final-cta .hero-note { color: rgba(255,255,255,0.3); }
+
+/* ==============================
+   FOOTER
+   ============================== */
+footer {
+  background: #0A0A0F; color: rgba(255,255,255,0.4);
+  padding: 48px 0; text-align: center; font-size: 13px;
+}
+footer .logo-text { font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+footer .logo-text strong { font-weight: 900; }
+footer p { margin-bottom: 4px; }
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+@media (max-width: 768px) {
+  .hero-grid, .steps, .integrity-grid, .founders-grid, .pricing-cards, .coach-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 36px; }
+  .hero-phone { width: 260px; height: 520px; }
+  .nav-links a:not(.nav-cta) { display: none; }
+  .hero-form { flex-direction: column; }
+  .cred-row { gap: 24px; }
+  .cred-item { font-size: 11px; }
+  .problem h2, .how h2, .integrity-feature h2, .founders h2, .pricing h2, .final-cta h2 { font-size: 28px; }
+  .coach-features { grid-template-columns: 1fr; }
+  .pricing-cards { grid-template-columns: 1fr; max-width: 360px; }
+  .score-visual { width: 240px; height: 240px; }
+  .score-number { font-size: 64px; }
+}
+@media (max-width: 480px) {
+  .research-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav>
+  <div class="container">
+    <div class="nav-logo">accountable<strong>ME</strong></div>
+    <div class="nav-links">
+      <a href="#how">How It Works</a>
+      <a href="#score">Integrity Score</a>
+      <a href="#story">Our Story</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#coaches">For Coaches</a>
+      <a href="#beta-signup" class="nav-cta">Join the Beta</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-tagline">Accountability, Together</div>
+        <h1>Stop letting <em>yourself</em> down.</h1>
+        <p class="hero-sub">AccountableME lets you choose someone you trust as your accountability partner. AI learns when to nudge you, and your Integrity Score shows how well you're keeping your commitments to yourself.</p>
+        <form class="hero-form" id="beta-signup" onsubmit="handleBetaSignup(event)">
+          <input type="email" class="hero-input" placeholder="Enter your email" required>
+          <button type="submit" class="hero-btn">Join the Beta</button>
+        </form>
+        <div class="sms-consent">
+          <input type="checkbox" id="sms-optin-hero" required>
+          <label for="sms-optin-hero">I agree to receive SMS nudges and updates from AccountableME. <a href="terms.html" target="_blank">Terms & Privacy Policy</a></label>
+        </div>
+        <p class="hero-note">Launching mid-June 2026. iOS + Android. Free to start.</p>
+      </div>
+      <div>
+        <div class="hero-phone">
+          <div class="hp-header">
+            <div><div class="hp-greeting">Good morning</div><div class="hp-name">Ray</div></div>
+            <div class="hp-streak">12 day streak</div>
+          </div>
+          <div class="hp-stats">
+            <div class="hp-stat"><div class="hp-stat-val coral">87</div><div class="hp-stat-label">Integrity Score</div></div>
+            <div class="hp-stat"><div class="hp-stat-val">5/6</div><div class="hp-stat-label">Goals Today</div></div>
+            <div class="hp-stat"><div class="hp-stat-val">3</div><div class="hp-stat-label">Partners</div></div>
+          </div>
+          <div class="hp-goal"><div class="hp-check">&#10003;</div><div><div class="hp-goal-text">Morning run - 3 miles</div><div class="hp-goal-sub">Completed at 7:12 AM</div></div></div>
+          <div class="hp-goal"><div class="hp-check">&#10003;</div><div><div class="hp-goal-text">Read 20 pages</div><div class="hp-goal-sub">Completed at 8:45 AM</div></div></div>
+          <div class="hp-goal hp-goal-pending"><div class="hp-check hp-check-pending">...</div><div><div class="hp-goal-text">Meal prep for the week</div><div class="hp-goal-sub">Due by 6:00 PM</div></div></div>
+          <div class="hp-partner"><div class="hp-avatar">N</div><div class="hp-partner-text"><strong>Nakisha</strong> said "You got this!"</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PROBLEM ========== -->
+<section class="section problem">
+  <div class="container">
+    <div class="problem-inner">
+      <h2>The world holds you accountable for the big things.<br><em>But who's watching the rest?</em></h2>
+      <p>Your boss tracks your KPIs. Your team knows if you shipped. Your family knows if you showed up. But the promise to yourself that you'd read more, exercise consistently, start that project, deepen your faith practice: nobody sees those goals. Nobody asks. And when you fall behind, the only person you've let down is you.</p>
+      <p>That's not a willpower problem. It's a structure problem. Research shows that people who share goals with someone they trust and get regular check-ins are dramatically more likely to follow through. When you know your partner will be notified if you don't act, that anticipation becomes the motivator. You already have the drive. You just need the system.</p>
+      <div class="quote">
+        "It's amazing to me that we work to live up to our commitments to others but not ourselves."
+        <span class="attribution">-- Ray Guzman, Co-Founder</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== HOW IT WORKS ========== -->
+<section class="section how" id="how">
+  <div class="container">
+    <h2>Here's how it works</h2>
+    <p class="subtitle">Four steps to actually doing the things you said you'd do.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Set your goals</h3>
+          <p>Tell the AI what you want to accomplish in any area of life. It breaks big goals into daily and weekly actions with a plan tailored to you.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Invite your people</h3>
+          <p>This is why it works. Invite friends, family, or your coach as accountability partners. Different goals call for different people. Your running buddy for fitness. Your mentor for career. Research shows people who commit to goals alongside peers are dramatically more likely to follow through.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>Get nudged, not nagged</h3>
+          <p>The app nudges you first, privately, giving you grace to act on your own. If no action is taken, your accountability partner is notified. That tension is what changes behavior. It's loss aversion meets social accountability.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>Build your Integrity Score</h3>
+          <p>Every follow-through builds your score (0-100). Every missed commitment costs you. It's your reputation with yourself, quantified, visible, and shared with the people walking with you.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== INTEGRITY SCORE FEATURE ========== -->
+<section class="section integrity-feature" id="score">
+  <div class="container">
+    <div class="integrity-grid">
+      <div>
+        <h2>Your Integrity Score</h2>
+        <p class="lead">A simple way to see how well you're keeping your promises to yourself.</p>
+        <p>Most apps track what you did. AccountableME measures who you're becoming. Your Integrity Score (0-100) reflects how consistently you follow through on the commitments you've made to yourself.</p>
+        <p>It rises when you show up. It drops when you don't. Over time, it becomes the clearest picture of how consistently you're following through on the things that matter most to you.</p>
+        <p>Share it with your partners or keep it private. Hide it anytime if you'd rather focus on the doing than the measuring. But most people find that seeing the number changes their relationship with follow-through entirely.</p>
+        <p class="mirror">It's not a game. It's a tool that helps you see, at a glance, whether you're becoming the person you're working to be.</p>
+      </div>
+      <div>
+        <div class="score-visual">
+          <div class="score-ring"></div>
+          <div class="score-number">87</div>
+          <div class="score-label">Integrity Score</div>
+          <div class="score-sub">+4 this week</div>
+        </div>
+        <div class="score-breakdown">
+          <div class="score-item pos">+2 morning run</div>
+          <div class="score-item pos">+1 reading</div>
+          <div class="score-item neg">-1 missed meal prep</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WHY IT WORKS ========== -->
+<section class="section why-works">
+  <div class="container">
+    <h2>Why it works</h2>
+    <p class="subtitle">This isn't a theory. It's behavioral science.</p>
+    <div class="research-grid">
+      <div class="research-card">
+        <div class="research-stat">3.5x</div>
+        <h3>Public commitment multiplies follow-through</h3>
+        <p>People who commit to goals within a peer group significantly outperform those who set goals alone. Making your intentions visible to someone you trust changes your relationship with the goal.</p>
+        <div class="source">NBER Working Paper Series, 2012</div>
+      </div>
+      <div class="research-card">
+        <div class="research-stat">95%</div>
+        <h3>Buddy systems drive adherence</h3>
+        <p>Participants paired with accountability partners achieved dramatically higher adherence rates than those incentivized individually. The relationship matters more than the reward.</p>
+        <div class="source">UC Berkeley, 2024</div>
+      </div>
+      <div class="research-card">
+        <div class="research-stat">Weekly</div>
+        <h3>Optimal check-in cadence</h3>
+        <p>Research consistently shows that weekly peer interactions hit the sweet spot: frequent enough to maintain urgency, spaced enough to avoid fatigue. Brief 10-15 minute check-ins outperform longer, less frequent sessions.</p>
+        <div class="source">University of Virginia, 2015</div>
+      </div>
+      <div class="research-card">
+        <div class="research-stat">76%</div>
+        <h3>Structured accountability with a specific partner wins</h3>
+        <p>People who shared weekly progress with a specific accountability partner achieved their goals 76% of the time. Compare that to 35% for those working alone.</p>
+        <div class="source">Dr. Gail Matthews, Dominican University, 2015</div>
+      </div>
+    </div>
+    <p class="takeaway">AccountableME isn't guesswork. It's built on these research findings. Specific partners with weekly check-ins, mutual visibility, optimal nudge timing, and a measurable score that reflects your integrity. Every feature exists because the science says it works.</p>
+  </div>
+</section>
+
+<!-- ========== VIDEO ========== -->
+<section class="section video-section">
+  <div class="container">
+    <h2>See it in action</h2>
+    <p class="subtitle">60 seconds. No voiceover. Just the truth about accountability.</p>
+    <div class="video-wrapper">
+      <iframe src="teaser.html" title="AccountableME 60-second teaser" allowfullscreen loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ========== OBJECTION ========== -->
+<section class="section objection">
+  <div class="container">
+    <div class="objection-inner">
+      <h2>"Why not just <em>text my friend?</em>"</h2>
+      <p>You can. And for about two weeks, they'll check in. Then life gets in the way for both of you. They forget to ask. You forget to update them. There's no escalation, no built-in tension that makes you act. Nobody wants to be the person who nags their friend, and nobody wants to be nagged.</p>
+      <p>Research shows people working alone hit their goals 35% of the time. Add structured accountability with a specific partner who checks in weekly? That jumps to 76%. Texting lacks structure, visibility, and the escalation mechanic that actually changes behavior.</p>
+      <p>AccountableME removes the awkwardness. The app nudges you first, privately. If no action is taken, your partner is notified. That tension is the real motivator. Your partner gets automatic visibility into your progress without having to ask. The AI fills the gaps when your partner is busy. Your Integrity Score gives you a real, quantifiable measure of whether you're keeping your word.</p>
+      <p class="highlight">$12.99/month is less than one skipped gym visit. The question isn't whether you can afford it. <em>It's what it's costing you to keep letting yourself down.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== COACH PORTAL ========== -->
+<section class="section coach-portal" id="coaches">
+  <div class="container">
+    <div class="coach-inner">
+      <div class="coach-grid">
+        <div>
+          <h2>For coaches, therapists, and trainers</h2>
+          <div class="lead">A new channel for your practice.</div>
+          <p>Assign AccountableME to your clients as the accountability layer between sessions. They set goals with your guidance, track progress daily, and you get a dashboard showing exactly who's following through and who needs attention.</p>
+          <p>No more relying on self-reports. No more wondering what happened between sessions. The Integrity Score gives you an objective measure of client follow-through, and the nudge system keeps them engaged when you're not in the room.</p>
+          <a href="#beta-signup" class="coach-cta">Join as a Coach</a>
+        </div>
+        <div>
+          <div class="coach-features">
+            <div class="coach-feat">
+              <div class="cf-icon">&#128202;</div>
+              <h4>Client Dashboard</h4>
+              <p>See all your clients' progress, scores, and engagement in one view</p>
+            </div>
+            <div class="coach-feat">
+              <div class="cf-icon">&#128276;</div>
+              <h4>Smart Alerts</h4>
+              <p>Get notified when a client is falling behind so you can intervene early</p>
+            </div>
+            <div class="coach-feat">
+              <div class="cf-icon">&#127919;</div>
+              <h4>Goal Templates</h4>
+              <p>Create reusable goal frameworks your clients can adopt instantly</p>
+            </div>
+            <div class="coach-feat">
+              <div class="cf-icon">&#128101;</div>
+              <h4>Group Programs</h4>
+              <p>Run accountability pods for group coaching with shared visibility</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOUNDERS ========== -->
+<section class="section founders" id="story">
+  <div class="container">
+    <h2>Built by people who needed it</h2>
+    <p class="subtitle">Not a market opportunity. A personal one.</p>
+    <div class="founders-grid">
+      <div class="founder-card">
+        <h3>Ray Guzman</h3>
+        <div class="role">Co-Founder</div>
+        <p>U.S. Army veteran. Microsoft alum. 2x CEO. Currently CEO of SwitchPoint Ventures. Serial founder having built and exited four software companies. Serves on the boards of Ascend Federal Credit Union ($5B in assets) and Belmont University. Despite all of that, he'll tell you he struggles with personal accountability. That honesty is why AccountableME exists.</p>
+      </div>
+      <div class="founder-card">
+        <h3>Nakisha Guzman</h3>
+        <div class="role">Co-Founder</div>
+        <p>U.S. military veteran and serial entrepreneur. Founder of Ziva Academy, a school in the Democratic Republic of the Congo. She thinks deeply about human impact and blessing others with her resources: time, talent, knowledge, and capital. She understood, immediately, that the gap between intention and action needed a better solution.</p>
+      </div>
+    </div>
+    <div class="founders-story-block">
+      <h3>Why we built this</h3>
+      <p>It was the Fourth of July. Ray pulled out his annual goals list and realized the big things were on track -- the board commitments, the company milestones, the family trip. The world held him accountable for those. But the personal goals? The ones only he knew about? They were slipping. Again.</p>
+      <p>He went looking for an app. Something that would pair him with someone who'd actually ask, "Did you do it?" He didn't find one. Every app was a solitary habit tracker that relied on the very thing he was trying to build: self-discipline.</p>
+      <p><em>If a serial founder with a military background can admit he needs help following through on his personal goals, then maybe it's okay for everyone else to say the same thing.</em></p>
+      <p>Ray and Nakisha have been married 30 years and live in Franklin, Tennessee with their five daughters. They built AccountableME together. Because that vulnerability isn't a marketing angle. It's the truth that invites everyone in.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRICING ========== -->
+<section class="section pricing" id="pricing">
+  <div class="container">
+    <h2>Simple, honest pricing</h2>
+    <p class="subtitle">Try everything free for 14 days. No credit card required.</p>
+    <div class="pricing-cards">
+      <div class="price-card">
+        <div class="badge">Free Tier</div>
+        <div class="amount">$0</div>
+        <div class="period">forever</div>
+        <div class="equiv">&nbsp;</div>
+        <ul>
+          <li>Unlimited solo goal tracking</li>
+          <li>AI goal builder</li>
+          <li>Basic progress history</li>
+          <li>&nbsp;</li>
+          <li>&nbsp;</li>
+          <li>&nbsp;</li>
+        </ul>
+        <button class="card-btn" onclick="document.getElementById('beta-signup').scrollIntoView({behavior:'smooth'})">Join the Beta</button>
+      </div>
+      <div class="price-card featured">
+        <div class="badge">Monthly</div>
+        <div class="amount">$12.99</div>
+        <div class="period">per month</div>
+        <div class="equiv">Cancel anytime</div>
+        <ul>
+          <li>Everything in Free, plus:</li>
+          <li>Accountability partners</li>
+          <li>AI nudge engine + escalation</li>
+          <li>Integrity Score</li>
+          <li>Community feed</li>
+          <li>Coach Portal access</li>
+        </ul>
+        <button class="card-btn" onclick="document.getElementById('beta-signup').scrollIntoView({behavior:'smooth'})">Join the Beta</button>
+      </div>
+      <div class="price-card">
+        <div class="badge">Annual - Save 33%</div>
+        <div class="amount">$104</div>
+        <div class="period">per year</div>
+        <div class="equiv">Just $8.67/month</div>
+        <ul>
+          <li>Everything in Monthly</li>
+          <li>Priority beta access</li>
+          <li>4 months free vs. monthly</li>
+          <li>Lock in founder pricing</li>
+          <li>&nbsp;</li>
+          <li>&nbsp;</li>
+        </ul>
+        <button class="card-btn" onclick="document.getElementById('beta-signup').scrollIntoView({behavior:'smooth'})">Join the Beta</button>
+      </div>
+    </div>
+    <p class="pricing-note">After your 14-day trial, the free tier gives you unlimited solo goal tracking. Partners, AI nudges, Integrity Score, and community require a paid plan.</p>
+  </div>
+</section>
+
+<!-- ========== FINAL CTA ========== -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Ready to stop letting <em>yourself</em> down?</h2>
+    <p>Sign up for the beta. Be first when we launch in June 2026.</p>
+    <form class="hero-form" onsubmit="handleBetaSignup(event)">
+      <input type="email" class="hero-input" placeholder="Enter your email" required>
+      <button type="submit" class="hero-btn">Join the Beta</button>
+    </form>
+    <div class="sms-consent">
+      <input type="checkbox" id="sms-optin-footer" required>
+      <label for="sms-optin-footer">I agree to receive SMS nudges and updates from AccountableME. <a href="terms.html" target="_blank">Terms & Privacy Policy</a></label>
+    </div>
+    <p class="hero-note">Free to start. No credit card required. iOS + Android.</p>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="logo-text">accountable<strong>ME</strong></div>
+    <p>Accountability, Together.</p>
+    <p style="margin-top:16px;">&copy; 2026 AccountableME. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+// Bind each checkbox to its nearest submit button
+document.querySelectorAll('.sms-consent input[type="checkbox"]').forEach(function(cb) {
+  var section = cb.closest('section') || cb.closest('.hero');
+  var btn = section ? section.querySelector('.hero-btn') : null;
+  if (btn) {
+    btn.disabled = true;
+    cb.addEventListener('change', function() { btn.disabled = !cb.checked; });
+  }
+});
+
+function handleBetaSignup(e) {
+  e.preventDefault();
+  var form = e.target;
+  var input = form.querySelector('input[type="email"]');
+  var email = input.value;
+  // TODO: Connect to email service backend (e.g., Mailchimp, ConvertKit, or custom API)
+  alert('Thanks for signing up for the beta! We\'ll be in touch soon.');
+  input.value = '';
+  var section = form.closest('section') || form.closest('.hero');
+  var cb = section ? section.querySelector('.sms-consent input[type="checkbox"]') : null;
+  if (cb) { cb.checked = false; form.querySelector('.hero-btn').disabled = true; }
+}
+</script>
+</body>
+</html>
